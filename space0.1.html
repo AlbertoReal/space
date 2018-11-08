@@ -1,0 +1,129 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    border:1px solid #d3d3d3;
+    background-color:black;
+}
+</style>
+</head>
+<body onload="startGame()">
+<div id="cosa">
+</div>
+<script>
+//version con topes laterales
+var piezas;
+var margenizq;
+var margender;
+var disparo=false;
+
+function startGame() {
+    piezas = new component(50, 50, "red", 50, 550);
+    margenizq = new component(1, 600, "red", 0, 0); 
+    margender  = new component(1, 600, "green", 599, 0);
+    Areajuego.start();
+}
+var Areajuego = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 600;
+        this.canvas.height = 600;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.interval = setInterval(updateGameArea, 2);
+        window.addEventListener('keydown', function (e) {
+            Areajuego.key = e.keyCode;
+        })
+        window.addEventListener('keyup', function (e) {
+            Areajuego.key = false;
+        })
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    }
+}
+function component(width, height, color, x, y) {
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.x = x;
+    this.y = y;    
+    this.update = function() {
+        ctx = Areajuego.context;
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+        this.crashWith = function(margenizq) {
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = margenizq.x;
+        var otherright = margenizq.x + (margenizq.width);
+        var othertop = margenizq.y;
+        var otherbottom = margenizq.y + (margenizq.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+}
+    this.crashWith = function(margender) {
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = margender.x;
+        var otherright = margender.x + (margender.width);
+        var othertop = margender.y;
+        var otherbottom = margender.y + (margender.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+}
+    this.newPos = function() {
+        this.x += this.speedX;       
+    }
+    this.newPosy = function(){
+        this.y-=3;
+    }
+}
+
+function updateGameArea() {
+    if ((piezas.crashWith(margenizq))){
+      piezas.x =11;
+  }
+  else if ((piezas.crashWith(margender))){
+      piezas.x =540; 
+    }else{
+    Areajuego.clear();
+    margenizq.update();
+    margender.update();
+    piezas.speedX = 0;
+    if (Areajuego.key && Areajuego.key == 37) {piezas.speedX = -1; }
+    if (Areajuego.key && Areajuego.key == 39) {piezas.speedX = 1; }
+    if (Areajuego.key && Areajuego.key == 32) { 
+        proyectil  =new component (10,10, "white",piezas.x+20, 540 );
+        disparo=true;
+    }
+    if(disparo){
+    proyectil.newPosy();
+    proyectil.update();
+     if (proyectil.y ==100){
+
+    }
+}
+   
+    piezas.newPos();    
+    piezas.update();
+}
+}
+</script>
+</div>
+</body>
+</html>
