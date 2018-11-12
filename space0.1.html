@@ -15,14 +15,12 @@ canvas {
 <script>
 //version con topes laterales
 var piezas;
-var margenizq;
-var margender;
 var disparo=false;
+var municion = [];
+
 
 function startGame() {
     piezas = new component(50, 50, "red", 50, 550);
-    margenizq = new component(1, 600, "red", 0, 0); 
-    margender  = new component(1, 600, "green", 599, 0);
     Areajuego.start();
 }
 var Areajuego = {
@@ -56,36 +54,6 @@ function component(width, height, color, x, y) {
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
-        this.crashWith = function(margenizq) {
-        var myleft = this.x;
-        var myright = this.x + (this.width);
-        var mytop = this.y;
-        var mybottom = this.y + (this.height);
-        var otherleft = margenizq.x;
-        var otherright = margenizq.x + (margenizq.width);
-        var othertop = margenizq.y;
-        var otherbottom = margenizq.y + (margenizq.height);
-        var crash = true;
-        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
-            crash = false;
-        }
-        return crash;
-}
-    this.crashWith = function(margender) {
-        var myleft = this.x;
-        var myright = this.x + (this.width);
-        var mytop = this.y;
-        var mybottom = this.y + (this.height);
-        var otherleft = margender.x;
-        var otherright = margender.x + (margender.width);
-        var othertop = margender.y;
-        var otherbottom = margender.y + (margender.height);
-        var crash = true;
-        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
-            crash = false;
-        }
-        return crash;
-}
     this.newPos = function() {
         this.x += this.speedX;       
     }
@@ -93,36 +61,43 @@ function component(width, height, color, x, y) {
         this.y-=3;
     }
 }
-
 function updateGameArea() {
-    if ((piezas.crashWith(margenizq))){
-      piezas.x =11;
-  }
-  else if ((piezas.crashWith(margender))){
-      piezas.x =540; 
-    }else{
     Areajuego.clear();
-    margenizq.update();
-    margender.update();
     piezas.speedX = 0;
-    if (Areajuego.key && Areajuego.key == 37) {piezas.speedX = -1; }
-    if (Areajuego.key && Areajuego.key == 39) {piezas.speedX = 1; }
+    if (Areajuego.key && Areajuego.key == 37) {
+        if (piezas.x <0){
+            piezas.x=0;
+        }
+        piezas.speedX = -1; }
+    if (Areajuego.key && Areajuego.key == 39) {
+        var borde =  (Areajuego.canvas.width);
+        if(piezas.x > borde - 50){
+            piezas.x = borde-piezas.width;
+        }
+        piezas.speedX = 1; }
     if (Areajuego.key && Areajuego.key == 32) { 
-        proyectil  =new component (10,10, "white",piezas.x+20, 540 );
+        proyectil  =new component (2,2, "white",piezas.x+22.5, 540 );
         disparo=true;
+        municion.push(proyectil);
     }
     if(disparo){
+        for(var i in municion){
+            var mun = municion[i];
+            mun.newPosy();
+            mun.update();
+        }
+
+        /*
     proyectil.newPosy();
     proyectil.update();
-     if (proyectil.y ==100){
-
-    }
-}
-   
+     if (proyectil.y <1){
+    disparo=false
+    }*/
+} 
     piezas.newPos();    
     piezas.update();
 }
-}
+
 </script>
 </div>
 </body>
