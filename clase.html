@@ -1,0 +1,98 @@
+
+ <!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    border:1px solid #d3d3d3;
+    background-color:black;
+}
+</style>
+</head>
+<body>
+<div id="cosa">
+</div>
+<script>
+
+window.onKeydown= function (e){
+
+	
+}
+
+var canvas=document.createElement("canvas");
+canvas.height =window.innerHeight-50;
+canvas.width=window.innerWidth-50;
+document.body.insertBefore(canvas, document.body.childNodes[0]);
+
+var cosa=10;
+var marciano=[];
+for(i=0; cosa< canvas.width-250;){
+marciano[i] = new Ships (cosa, 10 , 50, 50, "blue");
+cosa=cosa+70;
+i++;
+}
+for(i=0;i<marciano.length;){
+console.log(marciano[i]);
+i++;
+}
+var nave = new Ships (window.innerWidth/2, window.innerHeight-150, 50, 50, "red");
+var direccion =0;
+var teclas=[];
+var municion=[];
+
+function Ships(posX, posY, syzex, syzey,color){
+this.posX = posX;
+this.posY = posY;
+this.syzex = syzex;
+this.syzey = syzey;
+this.color = color;
+this.pintar = function(){
+	var context = canvas.getContext("2d");
+	context.fillStyle= this.color;
+	context.fillRect(this.posX, this.posY, this.syzex, this.syzey);
+}
+}
+function areaupdate(){
+if(teclas[39]){
+	if(nave.posx < canvas.with-nave.sizex){
+	nave.posx = nave.posx+10;
+	}else{
+	nave.posx = canvas.width-nave.posx-10;
+	}
+}
+if(teclas[37]){
+	if(nave.posx >0){
+	nave.posx = nave.pox-10;
+	}
+}else{
+	nave.posx=0;
+}	
+if(teclas[32]){
+	municion[municion.length] = new ships(nave.posx+nave.syzex/2,nave.posy-nave.syzey, "white", 5,5);
+}
+var context= canvas.getContext("2d");
+nave.pintar();
+if(direccion==0){
+	if (marciano[marciano.length-1].posx < canvas.width-50-5){
+	for (i=0 ; i<marciano.length; i++){
+		marciano[i].posX = marciano[i].posX+5;
+	}
+	}else{
+		for (i=0 ; i<marciano.length; i++){
+		marciano[i].posx = marciano[i].posx+(canvas.width-marciano[marciano.length-1].posX-50);
+		}
+		direccion=1;
+	}
+}
+for (var i=0; i<municion.length, i++;){
+	municion[i]=municion[i].posy-1;
+	municion[i].pintar;
+}
+for (i=0;i<marciano.length;){
+	marciano[i].pintar();
+	i++;
+}
+}
+setInterval(areaupdate, 20);
+</script>
