@@ -12,8 +12,8 @@ canvas {
     float: left;
     margin-top: 0;
     width: 200px;
-    height: 20px;
-    background-color: red;
+    height: 70px;
+    font-size: 40px;
 }
 #over{
     display: none;
@@ -50,14 +50,16 @@ var direccion = 0;
 var municionmarciano = [];
 var prueba =0;
 var puntuacion = 0;
-
+var marcianoAncho = 50;
+var nivel =5;
+var ranking =[1500,2800,3400,5000];
 
 
 function startGame() {
-piezas = new component(50, 50, "red", 50, 550);
-for(i=0; cosa< 450;){
-marciano[i] = new component (50, 50 ,"blue", cosa, 50);
-cosa=cosa+70;
+piezas = new component(50, 50, "red", 380, 550);
+for(i=0; cosa< 550;){
+marciano[i] = new component (marcianoAncho, marcianoAncho ,"blue", cosa, 50);
+cosa=cosa+marcianoAncho+15;
 i++;
 }
      Areajuego.start();
@@ -112,6 +114,7 @@ function component (width, height, color, x, y) {
        this.x -=2; 
     }
 }
+
 function updateGameArea() {
     Areajuego.clear();
     piezas.speedX = 0;
@@ -197,7 +200,6 @@ for(z=0; z<municionmarciano.length; z++){
     piezas.update();
     puntuacion=puntuacion+1;
     document.getElementById("cosa").innerHTML ="Score &nbsp;"+ puntuacion;
-    console.log(puntuacion);
 }
 function stop(){
     location.reload();
