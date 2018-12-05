@@ -33,12 +33,33 @@ canvas {
     background-color: white;
     color: black;
 }
+#over2{
+    background-color:black;
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0px;
+    left:0px;
+    z-index:1000;
+    color: white;
+    text-align: center;
+    font-size: 100px;
+}
+#boton_start{
+    font-size: 100px;
+    background-color: white;
+    color: black;
+}
 </style>
 </head>
-<body onload="startGame()">
+<body>
 <div id="cosa">
 </div>
 <div id="over">
+</div>
+<div id="over2">
+<p> Empezar partida</p>
+<button id="boton_start" onclick="startGame()">Empezar</button>
 </div>
 <script>
 var piezas;
@@ -63,6 +84,10 @@ cosa=cosa+marcianoAncho+15;
 i++;
 }
      Areajuego.start();
+     document.getElementById("over2").style.display= "none";
+}
+function stop(){
+    location.reload();
 }
 var Areajuego = {
     canvas : document.createElement("canvas"),
@@ -85,7 +110,6 @@ var Areajuego = {
     stop : function() {
         clearInterval(this.interval);
     }
-
 }
 function component (width, height, color, x, y) {
     this.width = width;
@@ -116,6 +140,7 @@ function component (width, height, color, x, y) {
 }
 
 function updateGameArea() {
+if(nivel > 0 && marciano.length > 0){
     Areajuego.clear();
     piezas.speedX = 0;
     if (Areajuego.key && Areajuego.key == 37) {
@@ -200,9 +225,13 @@ for(z=0; z<municionmarciano.length; z++){
     piezas.update();
     puntuacion=puntuacion+1;
     document.getElementById("cosa").innerHTML ="Score &nbsp;"+ puntuacion;
+}else if( nivel > 0 && marciano.length ==0){
+    nivel--;
+    marcianoAncho=marcianoAncho-5;
+    document.getElementById("over").style.display ="inline-block";
+    document.getElementById("over").innerHTML ="Game Over" + "<br> "+"Tu puntuacion &nbsp;"+ puntuacion + "<br>" + "<button id='boton_reset' onclick='startGame()'>" + "next level" +"</button>";
+}else{
 }
-function stop(){
-    location.reload();
 }
 //niveles 
 //guardar
